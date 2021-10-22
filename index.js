@@ -18,6 +18,17 @@ const worker = celery.createWorker(
 worker.register("tasks.add", (a, b) => a + b);
 worker.start();
 
+const schedule = require('node-schedule');
+
+const job = schedule.scheduleJob("*/10 * * * * *", function () {
+    const task = celery_client.createTask("tasks.add");
+    const result = task.applyAsync([2, 5]);
+
+    result.get().then(data => {
+        console.log("Result is : " + data);
+    });
+});
+
 
 app.get('/add-task', (req, res) => {
     const num1 = Number(req.query.num1);
@@ -26,8 +37,9 @@ app.get('/add-task', (req, res) => {
     const task = celery_client.createTask("tasks.add");
     const result = task.applyAsync([num1, num2]);
     result.get().then(data => {
-        res.send("Result is : " + data);
+        console.log("Result is : " + data);
     });
+    res.send("Task send to celery");
 })
 
 app.listen(port, () => {

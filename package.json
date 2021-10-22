@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "celery-node": "^0.5.6",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "node-schedule": "^2.0.0"
   }
 }
